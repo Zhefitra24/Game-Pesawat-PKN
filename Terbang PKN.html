@@ -28,10 +28,33 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 #msg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:8px 22px;border-radius:999px;color:#fff;font-size:clamp(22px,7vw,32px);font-weight:700;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none}
 #msg.on{opacity:1}
 .ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(8,18,38,.55)}
-.card{background:var(--card);border-radius:22px;padding:24px 22px;text-align:center;max-width:380px;width:100%}
+.card{background:var(--card);border-radius:22px;padding:24px 22px;text-align:center;max-width:420px;width:100%}
 .card h1,.card h2{margin:0 0 8px;font-size:30px;line-height:1.1}
 .card p{margin:8px 0;color:var(--mut);font-size:16px;line-height:1.45}
 .card b{color:var(--ink)}
+#historyWrap{margin-top:14px;max-height:240px;overflow-y:auto;text-align:left;background:rgba(14,24,48,.04);border:1px solid rgba(18,35,63,.08);border-radius:14px;padding:10px;scrollbar-width:thin;scrollbar-color:rgba(60,90,160,.45) transparent}
+#historyWrap::-webkit-scrollbar{width:8px}
+#historyWrap::-webkit-scrollbar-thumb{background:rgba(60,90,160,.45);border-radius:999px}
+.history-item{padding:12px 10px 10px;margin-bottom:10px;border-radius:12px;border:1px solid rgba(18,35,63,.08);background:rgba(255,255,255,.6);box-shadow:0 4px 10px rgba(15,23,42,.04)}
+.history-item:last-child{margin-bottom:0}
+.history-item.benar{border-left:3px solid #16a34a;background:rgba(22,163,74,.07)}
+.history-item.salah{border-left:3px solid #e11d48;background:rgba(225,29,72,.05)}
+.history-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.history-num{display:inline-flex;align-items:center;justify-content:center;background:#1d3557;color:#fff;border-radius:999px;width:28px;height:28px;font-size:12px;font-weight:700}
+.history-status{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700}
+.history-item.benar .history-status{background:rgba(22,163,74,.14);color:#166534}
+.history-item.salah .history-status{background:rgba(225,29,72,.12);color:#be123c}
+.history-item .q{font-weight:700;font-size:15px;line-height:1.45;margin:4px 0 10px;color:var(--ink)}
+.ans-list{display:grid;gap:8px;margin-top:8px}
+.ans-opt{display:flex;align-items:center;gap:8px;padding:8px 9px;border-radius:10px;border:1px solid rgba(18,35,63,.08);background:rgba(255,255,255,.58);font-size:13px;line-height:1.35;min-height:38px}
+.ans-opt.correct{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25)}
+.ans-opt.selected{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2)}
+.ans-opt.selected.correct{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.25)}
+.opt-label{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;border-radius:999px;background:#dfe8ff;color:#1f3c88;font-size:11px;font-weight:700}
+.opt-text{flex:1;color:var(--ink)}
+.opt-tag{display:inline-flex;align-items:center;justify-content:center;padding:3px 6px;border-radius:999px;background:rgba(15,23,42,.08);font-size:10px;font-weight:700;color:var(--ink)}
+.opt-tag.good{background:rgba(34,197,94,.15);color:#166534}
+.opt-tag.bad{background:rgba(239,68,68,.12);color:#be123c}
 button{font:inherit;font-weight:700;font-size:18px;background:var(--acc);color:var(--accink);border:0;border-radius:14px;padding:12px 28px;margin-top:14px;cursor:pointer}
 button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 #rk{font-size:24px;font-weight:700;color:var(--acc)}
@@ -74,6 +97,7 @@ button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 <h2>Misi selesai!</h2>
 <div id="rk"></div>
 <p id="rs"></p>
+<div id="historyWrap"></div>
 <button id="again">Main lagi</button>
 </div></div>
 </div>
@@ -103,7 +127,9 @@ var Q=[
 ["Bela Negara","Upaya pembelaan negara merupakan tugas dan tanggung jawab dari...","Seluruh warga negara","TNI dan Polri saja|Pemerintah pusat|Kaum pria saja"],
 ["Trias Politika","Teori Trias Politika membagi kekuasaan negara menjadi berapa bagian?","3","2|4|5"]
 ];
-var rec=0,FBD=1300,T=10,N=Q.length,$=function(i){return document.getElementById(i)};
+var rec=0,FBD=1300,T=10,N=Q.length,history=[], $=function(i){return document.getElementById(i)};
+function normalizeAnswer(v){return String(v||"").trim().toLowerCase().replace(/\s+/g," ");}
+function findOptionIndex(options, target){var t=normalizeAnswer(target);for(var i=0;i<options.length;i++){if(normalizeAnswer(options[i])===t)return i}return -1}
 var cv=$("c"),W=0,H=0,HZ=57;
 var BC=["#3b82f6","#ec4899","#f59e0b","#14b8a6"];
 var st="menu",qs=[],qi=0,cur=null,opts=[],t0=0,tl=T,score=0,ok=0,streak=0,best=0,px=.5,tx=.5,py=.5,ty=.5,keys={l:0,r:0},fb=null,last=0,drag=null,clouds=[];
@@ -121,13 +147,14 @@ function bgmStart(){var a=AU.bgm;if(a._f){clearInterval(a._f);a._f=null}try{a.cu
 function bgmFade(){var a=AU.bgm;if(a._f)clearInterval(a._f);a._f=setInterval(function(){a.volume=Math.max(0,a.volume-.05);if(a.volume<=0){clearInterval(a._f);a._f=null;a.pause();a.currentTime=0}},60)}
 function upd(){$("sc").textContent="Skor "+score.toLocaleString("id-ID");$("sk").textContent="🔥 Streak "+streak+ml();$("n").textContent=(qi+1)+"/"+N}
 function say(t,c){var m=$("msg");m.textContent=t;m.style.background=c;m.classList.add("on")}
-function start(){qs=shuffle(Q.slice());qi=0;score=0;ok=0;streak=0;best=0;px=tx=py=ty=.5;tod=.02;$("menu").hidden=true;$("end").hidden=true;$("hud").hidden=false;bgmStart();next()}
+function start(){qs=shuffle(Q.slice());qi=0;score=0;ok=0;streak=0;best=0;history=[];px=tx=py=ty=.5;tod=.02;$("menu").hidden=true;$("end").hidden=true;$("hud").hidden=false;bgmStart();next()}
+function renderHistory(){var wrap=$("historyWrap");if(!wrap)return;wrap.innerHTML="";if(!history.length){wrap.innerHTML="<div class='history-item salah'><div class='q'>Belum ada soal yang dijawab.</div></div>";return}history.forEach(function(item,index){var optionHtml="";var labels=["A","B","C","D"];item.options.forEach(function(opt,idx){var classes=["ans-opt"];var isSel=idx===item.selectedIndex;var isCorrect=idx===item.correctIndex;if(isCorrect)classes.push("correct");if(isSel)classes.push("selected");if(isCorrect&&isSel)classes.push("selected");var tag='';if(isCorrect){tag='<span class="opt-tag good">Jawaban Benar</span>';}else if(isSel){tag='<span class="opt-tag bad">Jawaban Kamu</span>';}if(isSel && !isCorrect){classes.push("selected");}optionHtml+='<div class="'+classes.join(" ")+'"><span class="opt-label">'+labels[idx]+'</span><span class="opt-text">'+opt+'</span>'+tag+'</div>'});var statusIcon=item.benar?"✓":"✕";var statusText=item.benar?"Benar":"Salah";var row=document.createElement("div");row.className="history-item "+(item.benar?"benar":"salah");row.innerHTML='<div class="history-head"><span class="history-num">'+(index+1)+'</span><span class="history-status">'+statusIcon+' '+statusText+'</span></div><div class="q">'+item.soal+'</div><div class="ans-list">'+optionHtml+'</div>';wrap.appendChild(row)})}
 function next(){if(qi>=N){return fin()}cur=qs[qi];opts=shuffle([cur[2]].concat(cur[3].split("|")));t0=performance.now();tl=T;fb=null;st="play";tx=ty=.5;rec=.9;$("hud").classList.remove("fo");$("msg").classList.remove("on");$("tag").textContent=cur[0];$("qt").textContent=cur[1];var o=$("opts");for(var i=0;i<4;i++){o.children[i].className="";o.children[i].lastChild.textContent=opts[i]}upd()}
-function fin(){st="end";$("hud").hidden=true;$("msg").classList.remove("on");bgmFade();var r=ok>=14?"Marsekal Garuda":ok>=11?"Kapten Garuda":ok>=6?"Pilot Handal":"Kadet Pilot";$("rk").textContent=r;$("rs").innerHTML="Skor <b>"+score.toLocaleString("id-ID")+"</b><br>Benar <b>"+ok+" dari "+N+"</b><br>Streak terbaik <b>"+best+"</b>";$("end").hidden=false}
-function answer(i,fast){if(st!=="play")return;var p=1-Math.max(0,tl)/T,good=opts[i]===cur[2];
+function fin(){st="end";$("hud").hidden=true;$("msg").classList.remove("on");bgmFade();var r=ok>=14?"Marsekal Garuda":ok>=11?"Kapten Garuda":ok>=6?"Pilot Handal":"Kadet Pilot";$("rk").textContent=r;$("rs").innerHTML="Skor <b>"+score.toLocaleString("id-ID")+"</b><br>Benar <b>"+ok+" dari "+N+"</b><br>Streak terbaik <b>"+best+"</b>";renderHistory();$("end").hidden=false}
+function answer(i,fast){if(st!=="play")return;var selectedIndex=i>=0&&i<opts.length?i:-1;var selectedValue=selectedIndex>=0?opts[selectedIndex]:"Tidak dijawab";var correctIndex=findOptionIndex(opts,cur[2]);var isCorrect=selectedIndex>=0&&normalizeAnswer(opts[selectedIndex])===normalizeAnswer(cur[2]);var p=1-Math.max(0,tl)/T,good=isCorrect;
 if(good){streak++;best=Math.max(best,streak);sfx("ok");var pts=Math.round((100+(fast?100*Math.max(0,tl)/T:0))*mult());score+=pts;ok++;say("Benar! +"+pts+ml(),"rgba(31,163,90,.92)")}
-else{streak=0;if(i>=0)sfx("bad");say(i<0?"Belum memilih!":"Salah!","rgba(214,40,57,.92)")}
-fb={pick:i,p:p,until:performance.now()+1300};st="fb";var o=$("opts"),ci=opts.indexOf(cur[2]);for(var k=0;k<4;k++)o.children[k].className="";o.children[ci].className="ok";if(!good&&i>=0)o.children[i].className="bad";upd()}
+else{streak=0;if(selectedIndex>=0)sfx("bad");say(selectedIndex<0?"Belum memilih!":"Salah!","rgba(214,40,57,.92)")}
+history.push({soal:cur[1],options:opts.slice(),selectedIndex:selectedIndex,correctIndex:correctIndex,benar:isCorrect,selectedValue:selectedValue,correctValue:cur[2]});fb={pick:i,p:p,until:performance.now()+1300};st="fb";var o=$("opts"),ci=correctIndex;for(var k=0;k<4;k++)o.children[k].className="";if(ci>=0)o.children[ci].className="ok";if(!good&&selectedIndex>=0)o.children[selectedIndex].className="bad";upd()}
 (function(){var o=$("opts");for(var i=0;i<4;i++)(function(i){o.children[i].onclick=function(){answer(i,true)}})(i)})();
 var R=new THREE.WebGLRenderer({canvas:cv,antialias:true}),S=new THREE.Scene(),CAM=new THREE.PerspectiveCamera(70,1,.1,800);S.fog=new THREE.Fog(0xffffff,35,190);
 var HL=new THREE.HemisphereLight(0xffffff,0x7799bb,.8);S.add(HL);var DL=new THREE.DirectionalLight(0xffffff,.5);DL.position.set(6,12,8);S.add(DL);
