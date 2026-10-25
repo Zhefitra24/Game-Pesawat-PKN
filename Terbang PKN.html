@@ -82,21 +82,26 @@ button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 (function(){
 try{var tcv=document.createElement("canvas");if(typeof THREE==="undefined"||!(tcv.getContext("webgl")||tcv.getContext("experimental-webgl")))throw 1}catch(e){document.querySelector("#menu .card").innerHTML="<h2>Game 3D tidak bisa dimuat</h2><p>Pastikan internet aktif dan browser mendukung WebGL, lalu muat ulang halaman.</p>";return}
 var Q=[
-["Pancasila","Lambang sila ke-2 Pancasila adalah ...","Rantai","Bintang|Pohon beringin|Padi dan kapas"],
-["Pancasila","Bunyi sila ke-3 Pancasila adalah ...","Persatuan Indonesia","Ketuhanan Yang Maha Esa|Kemanusiaan yang adil dan beradab|Keadilan sosial"],
-["Pancasila","Lambang sila ke-1 Pancasila adalah ...","Bintang","Rantai|Pohon beringin|Kepala banteng"],
-["Pancasila","Pohon beringin adalah lambang sila ke-...","Sila ke-3","Sila ke-1|Sila ke-2|Sila ke-4"],
-["Pancasila","Padi dan kapas adalah lambang sila ke-...","Sila ke-5","Sila ke-2|Sila ke-3|Sila ke-4"],
-["Pancasila","Pancasila ditetapkan sebagai dasar negara pada tanggal ...","18 Agustus 1945","1 Juni 1945|17 Agustus 1945|28 Oktober 1928"],
-["Pancasila","Hari lahir Pancasila diperingati setiap tanggal ...","1 Juni","17 Agustus|28 Oktober|10 November"],
-["Pancasila","Beribadah sesuai agama masing-masing sesuai dengan sila ke-...","Sila ke-1","Sila ke-2|Sila ke-3|Sila ke-5"],
-["UUD 1945","Pembukaan UUD 1945 terdiri atas berapa alinea?","4 alinea","3 alinea|5 alinea|6 alinea"],
-["UUD 1945","UUD 1945 disahkan oleh ...","PPKI","BPUPKI|MPR|DPR"],
-["UUD 1945","“Negara Indonesia adalah negara hukum” tercantum dalam ...","Pasal 1 ayat (3)","Pasal 27 ayat (1)|Pasal 29 ayat (1)|Pasal 33 ayat (1)"],
-["UUD 1945","Persamaan kedudukan warga negara dalam hukum dan pemerintahan diatur dalam ...","Pasal 27","Pasal 29|Pasal 31|Pasal 33"],
-["UUD 1945","Kemerdekaan memeluk agama dijamin dalam ...","Pasal 29","Pasal 27|Pasal 31|Pasal 33"],
-["UUD 1945","Hak warga negara untuk mendapat pendidikan diatur dalam ...","Pasal 31","Pasal 27|Pasal 29|Pasal 33"],
-["UUD 1945","Dekrit Presiden yang memberlakukan kembali UUD 1945 dikeluarkan pada ...","5 Juli 1959","17 Agustus 1945|18 Agustus 1945|27 Desember 1949"]
+["Pancasila","Dasar negara Republik Indonesia adalah...","Pancasila","UUD 1945|Tap MPR|Peraturan Presiden"],
+["UUD 1945","Menurut UUD 1945, kedaulatan berada di tangan...","Rakyat","Presiden|MPR|DPR"],
+["Bhinneka Tunggal Ika","Semboyan pemersatu bangsa Indonesia adalah...","Bhinneka Tunggal Ika","Tut Wuri Handayani|Pancasila|UUD 1945"],
+["Lembaga Negara","Lembaga negara yang bertugas membuat undang-undang disebut lembaga...","Legislatif","Eksekutif|Yudikatif|Federatif"],
+["HAM","Hak Asasi Manusia (HAM) pada dasarnya berlaku untuk...","Semua umat manusia","Warga negara asli saja|Pejabat pemerintah|Orang dewasa saja"],
+["Lembaga Negara","Presiden dan para menteri termasuk dalam lembaga...","Eksekutif","Legislatif|Yudikatif|Eksaminatif"],
+["UUD 1945","Hukum dasar tertulis tertinggi di Indonesia adalah...","UUD 1945","Undang-Undang (UU)|Peraturan Daerah (Perda)|Peraturan Pemerintah (PP)"],
+["Pancasila","Rela berkorban demi bangsa dan negara mencerminkan Pancasila sila ke-...","3","1|2|4"],
+["Demokrasi","Demokrasi Pancasila selalu mengutamakan penyelesaian masalah dengan cara...","Musyawarah mufakat","Pemungutan suara (voting)|Keputusan mayoritas|Keinginan pimpinan"],
+["Warga Negara","Membayar pajak tepat waktu adalah contoh dari...","Kewajiban warga negara","Hak warga negara|Hak asasi manusia|Aturan hukum pidana"],
+["Politik Luar Negeri","Kebijakan politik luar negeri Indonesia bersifat...","Bebas aktif","Liberal|Memihak blok barat|Tertutup"],
+["Lembaga Negara","Lembaga yang berwenang mengadili pada tingkat kasasi (tertinggi) adalah...","Mahkamah Agung (MA)","Mahkamah Konstitusi (MK)|Komisi Yudisial (KY)|Pengadilan Negeri"],
+["UUD 1945","Berdasarkan Pasal 1 ayat (1) UUD 1945, negara Indonesia ialah negara kesatuan yang berbentuk...","Republik","Serikat|Monarki|Parlementer"],
+["Pancasila","Pancasila merupakan ideologi terbuka, yang artinya...","Relevan dengan perkembangan zaman","Boleh diganti kapan saja|Menerima segala macam budaya asing|Ideologi pinjaman dari luar negeri"],
+["Keutuhan Negara","Contoh ancaman keutuhan negara yang berasal dari dalam negeri adalah...","Konflik SARA","Agresi militer asing|Mata-mata negara lain|Perdagangan internasional"],
+["Wawasan Nusantara","Cara pandang bangsa Indonesia terhadap diri dan lingkungannya demi persatuan disebut...","Wawasan Nusantara","Ketahanan Nasional|Patriotisme|Nasionalisme"],
+["Pancasila","Sikap toleransi beragama adalah perwujudan Pancasila sila ke-...","1","2|3|4"],
+["Hukum","Tujuan utama dibuatnya hukum atau peraturan adalah untuk menciptakan...","Ketertiban dan keadilan","Kekuasaan pemerintah|Rasa takut di masyarakat|Kebebasan tanpa batas"],
+["Bela Negara","Upaya pembelaan negara merupakan tugas dan tanggung jawab dari...","Seluruh warga negara","TNI dan Polri saja|Pemerintah pusat|Kaum pria saja"],
+["Trias Politika","Teori Trias Politika membagi kekuasaan negara menjadi berapa bagian?","3","2|4|5"]
 ];
 var rec=0,FBD=1300,T=10,N=Q.length,$=function(i){return document.getElementById(i)};
 var cv=$("c"),W=0,H=0,HZ=57;
